@@ -1,0 +1,22 @@
+.home {
+  &__header {
+    color: $header-color;
+    padding: $base-padding 0;
+  }
+
+  &__header,
+  &__actions {
+    text-align: center;
+  }
+
+  &__table {
+    display: flex;
+    max-width: 800px;
+    margin: auto;
+    padding-bottom: $base-padding;
+
+    .market-table {
+      flex: 1;
+    }
+  }
+}

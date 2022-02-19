@@ -1,3 +1,21 @@
 {
-  "app": {}
+  "app": {
+    "components": {
+      "marketTable": {
+        "total": "Total",
+        "size": "Size",
+        "price": "Price"
+      }
+    },
+    "pages": {
+      "home": {
+        "title": {
+          "PI_XBTUSD": "Bitcoin",
+          "PI_ETHUSD": "Ethereum"
+        },
+        "spread": "Spread {{ value }}",
+        "action": "Toggle Feed"
+      }
+    }
+  }
 }
