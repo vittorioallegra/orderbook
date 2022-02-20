@@ -1,9 +1,9 @@
-import { MAX_ORDER_LEVELS_DESKTOP, MAX_ORDER_LEVELS_MOBILE } from '../config';
+import { MAX_ORDER_LEVELS_DESKTOP, MAX_ORDER_LEVELS_MOBILE, MOBILE_BREAKPOINT } from '../config';
 import { Side } from '../enums';
 import { IOrderBook, IOrderLevel, IOrderLevelUpdate, IWebSocketResponseMessage } from '../interfaces';
 
 type IOrders = { [size: number]: IOrderLevel };
-const parseUpdatesOrderLevels = (
+export const parseUpdatesOrderLevels = (
     newOrderLevels: IOrderLevelUpdate[],
     currentOrderLevels: IOrderLevel[],
     side: Side,
@@ -49,31 +49,40 @@ const parseUpdatesOrderLevels = (
     }));
 };
 
-const parseWebSocketResponseMessage = (message: IWebSocketResponseMessage, state: IOrderBook): IOrderBook => {
+export const parseWebSocketResponseMessage = (message: IWebSocketResponseMessage, state: IOrderBook): IOrderBook => {
     if (!message.bids || !message.asks) {
         return state;
     }
 
     const bids = parseUpdatesOrderLevels(message.bids, state.buy, Side.BUY);
     const asks = parseUpdatesOrderLevels(message.asks, state.sell, Side.SELL);
-    if (!bids.length || !asks.length) {
-        return state;
+
+    const isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
+    const maxOrderLevels = isMobile ? MAX_ORDER_LEVELS_MOBILE : MAX_ORDER_LEVELS_DESKTOP;
+    let length = 0;
+    let spread = 0;
+    let total = 0;
+
+    if (bids.length && asks.length) {
+        length = Math.min(bids.length, asks.length, maxOrderLevels);
+        spread = bids[0].price - asks[0].price;
+        total = Math.max(bids[length - 1].total, asks[length - 1].total);
+    } else if (bids.length) {
+        length = Math.min(bids.length, maxOrderLevels);
+        spread = bids[0].price;
+        total = bids[length - 1].total;
+    } else if (asks.length) {
+        length = Math.min(asks.length, maxOrderLevels);
+        spread = -asks[0].price;
+        total = asks[length - 1].total;
     }
 
-    const isMobile = window.innerWidth <= 720;
-    const maxOrderLevels = isMobile ? MAX_ORDER_LEVELS_MOBILE : MAX_ORDER_LEVELS_DESKTOP;
-    const length = Math.min(bids.length, asks.length, maxOrderLevels);
-    const spread = bids[0].price - asks[0].price;
-    const total = Math.max(bids[length - 1].total, asks[length - 1].total);
-
-    const buy = bids.map((it) => ({
+    const mapOrderLevel = (it: IOrderLevel) => ({
         ...it,
         depth: it.total / total,
-    }));
-    const sell = asks.map((it) => ({
-        ...it,
-        depth: it.total / total,
-    }));
+    });
+    const buy = bids.map(mapOrderLevel);
+    const sell = asks.map(mapOrderLevel);
 
     return {
         buy,
@@ -81,8 +90,4 @@ const parseWebSocketResponseMessage = (message: IWebSocketResponseMessage, state
         spread,
         length,
     };
-};
-
-export const OrderBookHelper = {
-    parseWebSocketResponseMessage,
 };

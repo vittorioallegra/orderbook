@@ -1,7 +1,7 @@
 import React from 'react';
 import { Feed, Market } from '../enums';
 import { IOrderBook, IWebSocketRequestMessage, IWebSocketResponseMessage } from '../interfaces';
-import { createUseFunction, OrderBookHelper } from '../utils';
+import { createUseFunction, parseWebSocketResponseMessage } from '../utils';
 
 // properties that provides this context
 interface IWebSocketContext {
@@ -22,7 +22,7 @@ const initialState: IOrderBook = {
 function websocketReducer(orderbook: IOrderBook, message: IWebSocketResponseMessage | undefined): IOrderBook {
     if (message) {
         const state = message.feed === Feed.SNAPSHOT ? initialState : orderbook;
-        return OrderBookHelper.parseWebSocketResponseMessage(message, state);
+        return parseWebSocketResponseMessage(message, state);
     } else {
         return initialState;
     }

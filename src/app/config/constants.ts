@@ -1,2 +1,3 @@
 export const MAX_ORDER_LEVELS_DESKTOP = 16;
 export const MAX_ORDER_LEVELS_MOBILE = 12;
+export const MOBILE_BREAKPOINT = 720;
