@@ -1,4 +1,4 @@
-import { MAX_ORDER_LEVELS_DESKTOP } from '../config';
+import { MAX_ORDER_LEVELS_DESKTOP, MAX_ORDER_LEVELS_MOBILE } from '../config';
 import { Side } from '../enums';
 import { IOrderBook, IOrderLevel, IOrderLevelUpdate, IWebSocketResponseMessage } from '../interfaces';
 
@@ -60,7 +60,9 @@ const parseWebSocketResponseMessage = (message: IWebSocketResponseMessage, state
         return state;
     }
 
-    const length = Math.min(bids.length, asks.length, MAX_ORDER_LEVELS_DESKTOP);
+    const isMobile = window.innerWidth <= 720;
+    const maxOrderLevels = isMobile ? MAX_ORDER_LEVELS_MOBILE : MAX_ORDER_LEVELS_DESKTOP;
+    const length = Math.min(bids.length, asks.length, maxOrderLevels);
     const spread = bids[0].price - asks[0].price;
     const total = Math.max(bids[length - 1].total, asks[length - 1].total);
 

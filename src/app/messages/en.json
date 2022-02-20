@@ -2,6 +2,7 @@
   "app": {
     "components": {
       "marketTable": {
+        "spread": "Spread {{ value }}",
         "total": "Total",
         "size": "Size",
         "price": "Price"
@@ -17,7 +18,6 @@
           "description": "Connection closed due to inactivity.",
           "button": "Reconnect"
         },
-        "spread": "Spread {{ value }}",
         "action": "Toggle Feed"
       }
     }
