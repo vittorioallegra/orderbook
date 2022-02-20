@@ -21,7 +21,8 @@ const initialState: IOrderBook = {
 
 function websocketReducer(orderbook: IOrderBook, message: IWebSocketResponseMessage | undefined): IOrderBook {
     if (message) {
-        return OrderBookHelper.parseWebSocketResponseMessage(message, orderbook);
+        const state = message.feed === Feed.SNAPSHOT ? initialState : orderbook;
+        return OrderBookHelper.parseWebSocketResponseMessage(message, state);
     } else {
         return initialState;
     }
@@ -48,32 +49,25 @@ export const WebSocketProvider: React.FC = ({ children }) => {
     });
 
     const connect = (product = market) => {
-        console.log('Subscribing to ', product);
-
-        dispatch(undefined);
         const socket = new WebSocket('wss://www.cryptofacilities.com/ws/v1');
         socket.onopen = () => {
             socket.send(JSON.stringify(getSubscribeMessage(product)));
         };
         socket.onmessage = (event) => {
-            const message: IWebSocketResponseMessage = JSON.parse(event.data);
-            dispatch(message);
+            dispatch(JSON.parse(event.data));
         };
         setWebSocket(socket);
     };
 
     const toggleFeed = () => {
-        console.log('Unsubscribing from ', market);
-
         const product = market === Market.BITCON ? Market.ETHEREUM : Market.BITCON;
         websocket?.send(JSON.stringify(getUnsubscribeMessage(market)));
+        websocket?.send(JSON.stringify(getSubscribeMessage(product)));
         setMarket(product);
-        connect(product);
     };
 
     const disconnect = () => {
         if (websocket) {
-            console.log('Disconnecting websocket ', websocket);
             websocket.close();
             setWebSocket(undefined);
         }
