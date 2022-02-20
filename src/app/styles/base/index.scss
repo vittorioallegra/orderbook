@@ -1,7 +1,13 @@
 @import "variables";
 
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
 body {
   background-color: $main-color;
-  height: 100%;
   margin: 0;
 }

@@ -9,7 +9,7 @@ interface IWebSocketContext {
     orderbook: IOrderBook;
     connect: () => void;
     toggleFeed: () => void;
-    close: () => void;
+    disconnect: () => void;
 }
 
 const initialState: IOrderBook = {
@@ -50,6 +50,7 @@ export const WebSocketProvider: React.FC = ({ children }) => {
     const connect = (product = market) => {
         console.log('Subscribing to ', product);
 
+        dispatch(undefined);
         const socket = new WebSocket('wss://www.cryptofacilities.com/ws/v1');
         socket.onopen = () => {
             socket.send(JSON.stringify(getSubscribeMessage(product)));
@@ -67,12 +68,15 @@ export const WebSocketProvider: React.FC = ({ children }) => {
         const product = market === Market.BITCON ? Market.ETHEREUM : Market.BITCON;
         websocket?.send(JSON.stringify(getUnsubscribeMessage(market)));
         setMarket(product);
-        dispatch(undefined);
         connect(product);
     };
 
-    const close = () => {
-        websocket?.close();
+    const disconnect = () => {
+        if (websocket) {
+            console.log('Disconnecting websocket ', websocket);
+            websocket.close();
+            setWebSocket(undefined);
+        }
     };
 
     return (
@@ -82,7 +86,7 @@ export const WebSocketProvider: React.FC = ({ children }) => {
                 orderbook,
                 connect,
                 toggleFeed,
-                close,
+                disconnect,
             }}
         >
             {children}

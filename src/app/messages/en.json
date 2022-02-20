@@ -13,6 +13,10 @@
           "PI_XBTUSD": "Bitcoin",
           "PI_ETHUSD": "Ethereum"
         },
+        "modal": {
+          "description": "Connection closed due to inactivity.",
+          "button": "Reconnect"
+        },
         "spread": "Spread {{ value }}",
         "action": "Toggle Feed"
       }

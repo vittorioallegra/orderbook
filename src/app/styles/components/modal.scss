@@ -1,0 +1,22 @@
+.modal {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $overlay-background-color;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: $zindex-modal;
+
+  &__content {
+    background-color: $modal-background-color;
+    padding: $base-padding * 2;
+    text-align: center;
+
+    p {
+      margin-top: 0;
+    }
+  }
+}

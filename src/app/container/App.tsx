@@ -1,7 +1,7 @@
 import React from 'react';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
-import { WebSocketProvider } from '../contexts';
+import { PageVisibilityProvider, WebSocketProvider } from '../contexts';
 import { Home } from './Home';
 
 interface IProps {
@@ -11,7 +11,9 @@ interface IProps {
 const App: React.FC<IProps> = (props) => (
     <I18nextProvider i18n={props.i18n}>
         <WebSocketProvider>
-            <Home />
+            <PageVisibilityProvider>
+                <Home />
+            </PageVisibilityProvider>
         </WebSocketProvider>
     </I18nextProvider>
 );
