@@ -14,14 +14,32 @@
 
   &__header,
   &__level {
-    display: flex;
-    padding: #{$base-padding / 2} 0;
+    width: 100%;
+    height: 30px;
+    position: relative;
 
-    & > span {
-      flex: 1;
-      padding-right: #{$base-padding * 4};
-      text-align: end;
-      font-weight: 700;
+    &__infos {
+      padding: #{$base-padding / 2} 0;
+      display: flex;
+      width: 100%;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+    }
+
+    &--depth {
+      height: 100%;
+    }
+
+    &__infos {
+      & > span {
+        flex: 1;
+        padding-right: #{$base-padding * 4};
+        text-align: end;
+        font-weight: 700;
+      }
     }
   }
 
@@ -29,7 +47,14 @@
     .market-table {
       &__header,
       &__level {
-        flex-direction: row-reverse;
+        &__infos {
+          flex-direction: row-reverse;
+        }
+
+        &--depth {
+          background-color: $buy-background-color;
+          margin-left: auto;
+        }
 
         &--price {
           color: $buy-text-color;
@@ -42,6 +67,10 @@
     .market-table {
       &__header,
       &__level {
+        &--depth {
+          background-color: $sell-background-color;
+        }
+
         &--price {
           color: $sell-text-color;
         }

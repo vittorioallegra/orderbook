@@ -20,8 +20,8 @@ export const Home: React.FC = () => {
                 <span>{t('pages.home.spread', { value: formatSpread(orderbook.spread) })}</span>
             </div>
             <div className="home__table">
-                <MarketTable orderLevels={orderbook.buy} side={Side.BUY} />
-                <MarketTable orderLevels={orderbook.sell} side={Side.SELL} />
+                <MarketTable orderLevels={orderbook.buy} length={orderbook.length} side={Side.BUY} />
+                <MarketTable orderLevels={orderbook.sell} length={orderbook.length} side={Side.SELL} />
             </div>
             <div className="home__actions">
                 <Button label={t('pages.home.action')} onClick={toggleFeed} />

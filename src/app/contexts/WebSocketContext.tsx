@@ -16,6 +16,7 @@ const initialState: IOrderBook = {
     buy: [],
     sell: [],
     spread: 0,
+    length: 0,
 };
 
 function websocketReducer(orderbook: IOrderBook, message: IWebSocketResponseMessage | undefined): IOrderBook {

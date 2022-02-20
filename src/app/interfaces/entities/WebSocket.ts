@@ -6,10 +6,10 @@ export interface IWebSocketRequestMessage {
     readonly product_ids: Market[];
 }
 
-export type IUpdateOrderLevel = [price: number, size: number];
+export type IOrderLevelUpdate = [price: number, size: number];
 export interface IWebSocketResponseMessage {
-    readonly asks: IUpdateOrderLevel[];
-    readonly bids: IUpdateOrderLevel[];
+    readonly asks: IOrderLevelUpdate[];
+    readonly bids: IOrderLevelUpdate[];
     readonly feed: Feed;
     readonly numLevels: number;
     readonly product_id: Market;
